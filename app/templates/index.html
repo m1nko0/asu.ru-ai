@@ -1,0 +1,105 @@
+<!-- app/templates/index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификатор ирисов Фишера</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', path='/css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1 class="text-center mb-4 header-title">Классификатор ирисов Фишера</h1>
+            
+            <div class="text-center mb-4">
+                <img src="{{ url_for('static', path='/images/iris.jpg') }}" alt="Ирис" class="iris-image">
+            </div>
+            
+            <p class="mb-4">Введите параметры цветка ириса для определения его вида.</p>
+            
+            <form method="post">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="sepal_length" class="form-label">Длина чашелистика (см)</label>
+                        <input type="number" class="form-control" id="sepal_length" name="sepal_length" 
+                               step="0.1" min="4.0" max="8.0" required 
+                               value="{{ features.sepal_length if features else 5.8 }}"
+                               data-default="5.8">
+                        <div class="help-text">Типичный диапазон: 4.3 - 7.9 см</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="sepal_width" class="form-label">Ширина чашелистика (см)</label>
+                        <input type="number" class="form-control" id="sepal_width" name="sepal_width" 
+                               step="0.1" min="2.0" max="4.5" required 
+                               value="{{ features.sepal_width if features else 3.0 }}"
+                               data-default="3.0">
+                        <div class="help-text">Типичный диапазон: 2.0 - 4.4 см</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="petal_length" class="form-label">Длина лепестка (см)</label>
+                        <input type="number" class="form-control" id="petal_length" name="petal_length" 
+                               step="0.1" min="1.0" max="7.0" required 
+                               value="{{ features.petal_length if features else 4.0 }}"
+                               data-default="4.0">
+                        <div class="help-text">Типичный диапазон: 1.0 - 6.9 см</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="petal_width" class="form-label">Ширина лепестка (см)</label>
+                        <input type="number" class="form-control" id="petal_width" name="petal_width" 
+                               step="0.1" min="0.1" max="2.5" required 
+                               value="{{ features.petal_width if features else 1.2 }}"
+                               data-default="1.2">
+                        <div class="help-text">Типичный диапазон: 0.1 - 2.5 см</div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">Определить вид ириса</button>
+                    <button type="button" id="reset-form" class="btn btn-outline-secondary">Сбросить форму</button>
+                </div>
+            </form>
+            
+            {% if prediction %}
+            <div class="result-container mt-4">
+                <h4 class="text-center">Результат классификации</h4>
+                <p class="text-center mb-0">
+                    <strong>Предсказанный вид ириса:</strong> 
+                    <span class="
+                        {% if prediction == 'setosa' %}iris-setosa
+                        {% elif prediction == 'versicolor' %}iris-versicolor
+                        {% elif prediction == 'virginica' %}iris-virginica
+                        {% endif %}">
+                        {{ prediction }}
+                    </span>
+                </p>
+                <p class="text-center">
+                    <strong>Уверенность модели:</strong> {{ probability }}%
+                </p>
+            </div>
+            {% endif %}
+            
+            <div class="iris-info mt-4">
+                <h5>О наборе данных:</h5>
+                <p>Набор данных "Ирисы Фишера" содержит измерения для трех видов ирисов:</p>
+                <ul>
+                    <li><span class="iris-type iris-setosa">Setosa</span>
+                        Обычно имеет короткие лепестки и широкие чашелистики</li>
+                    <li><span class="iris-type iris-versicolor">Versicolor</span>
+                        Имеет средние по размеру лепестки и чашелистики</li>
+                    <li><span class="iris-type iris-virginica">Virginica</span>
+                        Обычно имеет длинные лепестки и узкие чашелистики</li>
+                </ul>
+            </div>
+            
+            <footer>
+                <p>Проект "Классификатор ирисов Фишера" © 2025</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', path='/js/script.js') }}"></script>
+</body>
+</html>
